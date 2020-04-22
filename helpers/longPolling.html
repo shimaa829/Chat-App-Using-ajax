@@ -8,12 +8,12 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <form id="form">
+        <form id="form" >
             <input id = "content" type="text" name="content">
             <button type="submit">Send</button>
 
         </form>
-        <div id = "messages" style="white-space: pre-wrap;"></div>
+        <div id = "messages" style="white-space: pre-wrap; border: solid 1px gray; margin-top: 2px; padding: 5px; width: 280px; height: 300px;"></div>
         <script>
            
             const form = document.getElementById('form')
@@ -23,19 +23,18 @@
             form.addEventListener('submit',(e)=>{
                 e.preventDefault()
                 const message = input.value;
-                axios.post('http://127.0.0.1:3001/messages', {message}).then(res => input.value = '')
+                axios.post('http://127.0.0.1:3001/long', {message}).then(res => input.value = '')
             })
 
-            setInterval(()=>{
-
-                axios.get('http://127.0.0.1:3001/messages').then(res => {
-                    const { data } = res
-                    const messagesValue = data.map( m => m.message).join('\n')
-                    messages.innerHTML = messagesValue
+            const getNewMessage = () => {
+                axios.get('http://127.0.0.1:3001/long').then(res => {
+                 const {data} = res
+                 messages.innerHTML = messages.innerHTML + data.message + '\n'
+                 getNewMessage()
                 })
-
-           }, 5 * 1000)
+            }
             
+            getNewMessage()
 
         </script>
     </body>

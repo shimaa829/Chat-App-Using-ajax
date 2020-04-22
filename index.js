@@ -23,23 +23,24 @@ app.get('/messages', (req,res)=>{
 
 //  -------------------------------
 
-const subsscribers = {}
+const subscribers = {}
 
-app.post('/long',()=> {
+app.post('/long',(req, res)=> {
     const { body } = req
 
     // SOME LOGIC TO ALL USERS
-    Object.keys(subsscribers).forEach((id) => {
-        subsscribers[id].json(body)
+    Object.keys(subscribers).forEach((id) => {
+        subscribers[id].json(body)
+        delete subscribers[id]
     })
     res.status(204).end()
 })
 
 app.get('/long', (req, res) =>{
     const id =  Math.ceil(Math.random() * 100000)
-    subsscribers[id] = res
+    subscribers[id] = res
 })
 
-app.listen(3000,()=>{
+app.listen(3001,()=>{
     console.info('Server listening on port 3000')
 })
